@@ -24,7 +24,7 @@ public class Frame extends JFrame{
     private int Height;
     private int Width;
     private String text;
-    private stockObject currentStock;
+    private static stockObject currentStock;
     public Frame(int h, int w) {
         Height = h;
         Width = w;
@@ -139,7 +139,7 @@ public class Frame extends JFrame{
         textField.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
                 text = textField.getText();
-                if (getHashed.getSFH(text).getName() != null) {
+                if (getHashed.getSFH(text) != null) {
                     stockName.setText(getHashed.getSFH(text).getName());
                     stockTicker.setText(getHashed.getSFH(text).getTicker());
                     stockPrice.setText("$" + getHashed.getSFH(text).getPrice());
@@ -179,5 +179,12 @@ public class Frame extends JFrame{
         while(this.isActive()) {
             if(currentStock != null)  {currentStock.updatePrice();} // Probably want to make a seperate thread to do this
         }
+    }
+    public static stockObject getStock() {
+        return currentStock;
+    }
+    public static void setStock(stockObject o) {
+        currentStock = o;
+        return;
     }
 }
