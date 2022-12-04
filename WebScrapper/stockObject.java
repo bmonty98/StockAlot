@@ -14,7 +14,6 @@ public class stockObject implements Runnable, Comparable<stockObject> {
     private String price;
     private String ticker;
     private Element row;
-    private long value; // Here for no reason currently. Comparable is not complete
 
     public void run() {
         if (row.select("td:nth-of-type(1)").text() == null) {
@@ -83,13 +82,11 @@ public class stockObject implements Runnable, Comparable<stockObject> {
 
     @Override
     public int compareTo(stockObject o) {
-        if (this.value > o.getValue()) {
-            return 1;
-        } else if (this.value == o.getValue()) {
-            return 0;
-        } else {
-            return -1;
-        }
+        int thisPrice = Integer.parseInt(this.getPrice());
+        int otherPrice = Integer.parseInt(o.getPrice());
+        if (thisPrice > otherPrice) {return 1;}
+        else if (thisPrice == otherPrice) {return 0;}
+        else {return -1;}
     }
 
     public void printStock() {
@@ -112,10 +109,6 @@ public class stockObject implements Runnable, Comparable<stockObject> {
 
     public String getName() {
         return this.name;
-    }
-
-    public long getValue() {
-        return this.value;
     }
 
     public String getURL() {
@@ -143,12 +136,6 @@ public class stockObject implements Runnable, Comparable<stockObject> {
         this.url = sURL;
         return;
     }
-
-    public void setValue(int sValue) {
-        this.value = sValue;
-        return;
-    }
-
     public void setPrice(String sPrice) {
         this.price = sPrice;
         return;
