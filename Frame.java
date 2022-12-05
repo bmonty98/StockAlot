@@ -24,11 +24,14 @@ import WebScrapper.boolingShingle;
 import Financial.GenerateCapital;
 import Financial.StartingMoney;
 import java.util.Stack;
+import WebScrapper.User;
 
 public class Frame extends JFrame {
     private int Height;
     private int Width;
     private String text;
+
+    User Player;
 
     // Capital Generation Variables
     private int rollcount = 10;
@@ -181,11 +184,16 @@ public class Frame extends JFrame {
         //---------------------------------------------------------------------
         
         JPanel CapPanel = new JPanel();
+        CapPanel.setLayout(new BorderLayout());
         CapPanel.setAlignmentX(SwingConstants.CENTER);
         CapPanel.setPreferredSize(new Dimension(Width/3, Height/3));
         CapPanel.setBackground(new Color (70,70,80));
         CapPanel.setBorder(border);
         
+        JPanel ButtonPanel = new JPanel();
+        ButtonPanel.setLayout(new BorderLayout());
+        ButtonPanel.setBackground(new Color (70,70,80));
+
         JLabel CapTitle = new JLabel("", SwingConstants.CENTER);
         CapTitle.setForeground(Color.WHITE);
         CapTitle.setText("Current User Capital:");
@@ -196,8 +204,8 @@ public class Frame extends JFrame {
         CapVal.setText("$0.00");
         CapVal.setFont(new Font("Arial", Font.BOLD, 20));
 
-        CapPanel.add(CapVal);
-        CapPanel.add(CapTitle);
+        CapPanel.add(CapVal, BorderLayout.CENTER);
+        CapPanel.add(CapTitle, BorderLayout.NORTH);
 
         JButton RerollButton = new JButton();
         JButton AcceptButton = new JButton();
@@ -214,6 +222,7 @@ public class Frame extends JFrame {
                 
                 if (rollcount <= 0){
                     startmoney.giveMeMoney(rolls.pop());
+                    Player.setCapital(startmoney.getMoney());
                     CapPanel.remove(RerollButton);
                     CapPanel.remove(AcceptButton);
                 }
@@ -227,16 +236,18 @@ public class Frame extends JFrame {
                     CapPanel.remove(RerollButton);
                     CapPanel.remove(AcceptButton);
                     startmoney.giveMeMoney(rolls.pop());
+                    Player.setCapital(startmoney.getMoney());
                 }
             }
         });
 
         this.add(CapPanel, BorderLayout.CENTER);
-        RerollButton.setPreferredSize(new Dimension(Width/3 + 10, Height/4));
-        AcceptButton .setPreferredSize(new Dimension(Width/5 + 10, Height/4));
-        CapPanel.add(RerollButton, BorderLayout.WEST);
-        CapPanel.add(AcceptButton, BorderLayout.EAST);
-        RerollButton.setText(("Roll (Remaining: " + rollcount + ")"));
+        CapPanel.add(ButtonPanel, BorderLayout.SOUTH);
+        RerollButton.setPreferredSize(new Dimension(Width/4, Height/4));
+        AcceptButton .setPreferredSize(new Dimension(Width/4, Height/4));
+        ButtonPanel.add(RerollButton, BorderLayout.WEST);
+        ButtonPanel.add(AcceptButton, BorderLayout.EAST);
+        RerollButton.setText(("Roll (" + rollcount + ")"));
         AcceptButton.setText("Accept Capital");
 
 
