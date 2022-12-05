@@ -25,6 +25,7 @@ public class Frame extends JFrame{
     private int Width;
     private String text;
     private static stockObject currentStock;
+    private static int amount = 0;
     public Frame(int h, int w) {
         Height = h;
         Width = w;
@@ -63,9 +64,9 @@ public class Frame extends JFrame{
         upButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-                int num = Integer.parseInt(count.getText());
-                num++;
-                count.setText(Integer.toString(num));
+                amount = Integer.parseInt(count.getText());
+                amount++;
+                count.setText(Integer.toString(amount));
             }
         });
         JButton downButton = new JButton();
@@ -73,9 +74,9 @@ public class Frame extends JFrame{
         downButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-                int num = Integer.parseInt(count.getText());
-                if (num > 0) {num--;}
-                count.setText(Integer.toString(num));
+                amount = Integer.parseInt(count.getText());
+                if (amount > 0) {amount--;}
+                count.setText(Integer.toString(amount));
             }
         });
         countDisplay.add(downButton, BorderLayout.WEST);
@@ -146,6 +147,7 @@ public class Frame extends JFrame{
                     currentStock = getHashed.getSFH(text);
                 }
                 else {
+                    currentStock = null;
                     stockName.setText("Stock Not Found");
                     stockTicker.setText("");
                     stockPrice.setText("");
@@ -169,7 +171,7 @@ public class Frame extends JFrame{
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-            //WebScrapper.updateAllStocks();
+            WebScrapper.updateAllStocks();
             //Add multithreading to updating all stocks (will make runtime 2812x faster)
             WebScrapper.writeJSON();
             //Save user data as well
@@ -185,6 +187,13 @@ public class Frame extends JFrame{
     }
     public static void setStock(stockObject o) {
         currentStock = o;
+        return;
+    }
+    public static int getAmount() {
+        return amount;
+    }
+    public static void setAmount(int a) {
+        amount = a;
         return;
     }
 }
