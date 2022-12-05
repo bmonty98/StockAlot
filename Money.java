@@ -1,3 +1,4 @@
+package Financial;
 abstract public class Money {
     
     protected double money;
