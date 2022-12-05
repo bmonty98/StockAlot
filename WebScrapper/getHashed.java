@@ -6,9 +6,8 @@ public class getHashed {
             return WebScrapper.someHash.get(ticker);
         }
         else {
-            stockObject emptyStock = new stockObject();
             System.out.println("Stock Ticker Not Found");
-            return emptyStock;
+            return null;
         }
     }
 }

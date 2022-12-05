@@ -5,7 +5,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import java.io.IOException;
 
-public class stockObject implements Runnable, Comparable<stockObject> {
+public class stockObject implements Runnable, Comparable<stockObject>, boolingShingle {
     private static String useSubStr = "                                             ";
     private static String yahooURL = "https://finance.yahoo.com/quote/";
     private String stockYURL;
@@ -66,7 +66,7 @@ public class stockObject implements Runnable, Comparable<stockObject> {
 
     // Put method in a while loop/
     // - Estimated ~20 second buffer is good
-    public void updatePrice() {
+    public void someMethod() {
         try {
             Document stockPage = Jsoup.connect(this.getYURL()).get();
             String priceStr = stockPage.select(

@@ -3,7 +3,7 @@ package WebScrapper;
 public class PriceUpdate implements Runnable {
     private stockObject thisStock;
     public void run() {
-        thisStock.updatePrice();
+        thisStock.someMethod();
         //thisStock.setPrice("poop worked");
         //thisStock.printStock();
         return;
