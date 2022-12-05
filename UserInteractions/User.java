@@ -5,30 +5,30 @@ import java.util.HashMap;
 // import Draw.*;
 import java.util.*;
 import java.util.Map.*;
+import Financial.Money;
 
 import Draw.Frame;
 
 // import org.omg.CORBA.portable.ValueBase;
 
- public class User implements boolingShingle{
+ public class User extends Money implements boolingShingle{
     // please for the love of god change this later to zero!
-    private double capital;
     private String name;
     private HashMap<String, stockObject> portfolio;
     private double netWorth;
     
     public User(){
-        this.capital = 6969;
+        this.money = 0;
         this.name = "Player 1";
         this.portfolio = new HashMap<String, stockObject>();
-        this.netWorth = this.capital;
+        this.netWorth = this.money;
     }
 
     public User(double capital, String name, HashMap<String, stockObject> portfolio){
-        this.capital = capital;
+        this.money = capital;
         this.name = name;
         this.portfolio = portfolio;
-        this.netWorth = this.capital;
+        this.netWorth = this.money;
     }
 
     /**
@@ -63,9 +63,9 @@ import Draw.Frame;
         // checks to see if User has the funds to purchase that stock and if so, does the transaction:
             double targetedStockPrice = Double.parseDouble(targetedStock.getPrice());
 
-            if(this.capital - targetedStockPrice >= 0){
+            if(this.money - targetedStockPrice >= 0){
                 this.portfolio.put(targetedStock.getTicker(), targetedStock);
-                this.capital -= targetedStockPrice * amount;
+                this.money -= targetedStockPrice * amount;
                 Frame.getStock().setQuantity(targetedStock.getQauntity() + amount);
                 System.out.println("you have just bought a stock");
                 System.out.println(Frame.getStock().getQauntity());
@@ -112,7 +112,7 @@ import Draw.Frame;
             double targetedStockForSalePrice = Double.parseDouble(targetedStockForSale.getPrice());
 
             if(Frame.getStock().getQauntity() - amount >= 0){
-                this.capital += targetedStockForSalePrice * amount;
+                this.money += targetedStockForSalePrice * amount;
                 Frame.getStock().setQuantity(targetedStockForSale.getQauntity() - amount);
                 System.out.println("you have just sold a stock");
                 System.out.println(Frame.getStock().getQauntity());
@@ -134,7 +134,7 @@ import Draw.Frame;
         }
 
         catch(ArithmeticException negativeQuantity){
-            System.out.println("Cannot have a negative quantity of a stock!!!!! if you cant count, go back to kindergarden.");
+            //System.out.println("Cannot have a negative quantity of a stock!!!!! if you cant count, go back to kindergarden.");
             return;
         }
 
@@ -146,7 +146,7 @@ import Draw.Frame;
     * if not the case, returns false.
      */
     public Boolean bankruptcy(){
-        if(this.capital <= 0.0 && this.portfolio.isEmpty()){
+        if(this.money <= 0.0 && this.portfolio.isEmpty()){
             return true;
         }
         return false;
@@ -154,8 +154,13 @@ import Draw.Frame;
 
      // ------------------GETTER AND SETTTERS---------------
 
-     public double getCapital(){
-        return this.capital;
+     public double getMoney(){
+        return this.money;
+     }
+     @Override
+     public void giveMeMoney(double monies) {
+        this.money += monies;
+        return;
      }
 
      public String getName(){
@@ -167,11 +172,15 @@ import Draw.Frame;
      }
 
      public double getNetWorth(){
+        this.netWorth = money;
+        for (Entry<String, stockObject> entry : this.getPortfolio().entrySet()) {
+            this.netWorth += Double.parseDouble(entry.getValue().getPrice()) * entry.getValue().getQauntity();
+        }
         return this.netWorth;
      }
 
      public void setCapital(double capital){
-        this.capital = capital;
+        this.money = capital;
         return;
      }
 
@@ -194,7 +203,7 @@ import Draw.Frame;
     public void someMethod(){
 
     System.out.println(this.name);
-    System.out.println(this.capital);
+    System.out.println(this.money);
     // System.out.println("the following is the entries from the set:");
 
     // if(!this.portfolio.isEmpty()) {
