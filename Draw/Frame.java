@@ -19,8 +19,9 @@ import java.awt.GridLayout;
 import javax.swing.border.Border;
 import javax.swing.BorderFactory;
 import WebScrapper.stockObject;
+import WebScrapper.boolingShingle;
 
-public class Frame extends JFrame{
+public class Frame extends JFrame {
     private int Height;
     private int Width;
     private String text;
@@ -179,7 +180,7 @@ public class Frame extends JFrame{
             }
         });
         while(this.isActive()) {
-            if(currentStock != null)  {currentStock.updatePrice();} // Probably want to make a seperate thread to do this
+            if(currentStock != null)  {currentStock.someMethod();} // Probably want to make a seperate thread to do this
         }
     }
     public static stockObject getStock() {
