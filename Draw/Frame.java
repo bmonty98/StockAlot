@@ -1,8 +1,4 @@
 package Draw;
-import java.util.ArrayList;
-import java.util.function.DoubleToLongFunction;
-import java.util.spi.CurrencyNameProvider;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -20,11 +16,16 @@ import java.awt.event.WindowAdapter;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.Font;
 import javax.swing.border.Border;
-import javax.management.relation.RoleNotFoundException;
+import javax.swing.plaf.DimensionUIResource;
 import javax.swing.BorderFactory;
 import WebScrapper.stockObject;
+import Financial.GenerateCapital;
+import Financial.StartingMoney;
+import java.util.Stack;
 import UserInteractions.User;
+import java.util.ArrayList;
 
 public class Frame extends JFrame {
     private int Height;
@@ -32,10 +33,10 @@ public class Frame extends JFrame {
     private String text;
     private static stockObject currentStock;
     private static int amount = 0;
-    private boolean doRepaint;
-    public Frame() {};
+    private int rollcount;
+    private Double capital;
+    public static Stack<Double> rolls;
     public Frame(int h, int w) {
-        doRepaint = false;
         User ronald = new User();
         ArrayList<StockInfo> panelsOfStocks = new ArrayList<>();
         Height = h;
@@ -46,21 +47,43 @@ public class Frame extends JFrame {
         this.setLayout(new BorderLayout());
         this.setResizable(false);
         Border border = BorderFactory.createLineBorder(Color.WHITE);
+
+        JPanel CapPanel = new JPanel();
+        CapPanel.setLayout(new BorderLayout());
+        CapPanel.setAlignmentX(SwingConstants.CENTER);
+        CapPanel.setPreferredSize(new Dimension(Width/3, Height/3));
+        CapPanel.setBackground(new Color (70,70,80));
+        CapPanel.setBorder(border);
+        
+        JPanel ButtonPanel = new JPanel();
+        ButtonPanel.setLayout(new BorderLayout());
+        ButtonPanel.setBackground(new Color (70,70,80));
+        ButtonPanel.setPreferredSize(new DimensionUIResource((Width/3), Height/4));
+
+        JLabel CapTitle = new JLabel("", SwingConstants.CENTER);
+        CapTitle.setForeground(Color.WHITE);
+        CapTitle.setText("Current User Capital:");
+        CapTitle.setFont(new Font("Arial", Font.BOLD, 20));
+        
+        JLabel CapVal = new JLabel("", SwingConstants.CENTER);
+        CapVal.setForeground(Color.WHITE);
+        CapVal.setText("$0.00");
+        CapVal.setFont(new Font("Arial", Font.BOLD, 20));
         
         JPanel testPan = new JPanel();
-        testPan.setPreferredSize(new Dimension(Width/2, Height));
+        testPan.setPreferredSize(new Dimension(Width/3, Height));
         testPan.setBackground(new Color (70,70,80));
         testPan.setBorder(border);
 
         JPanel stockPanel2 = new JPanel();
-        stockPanel2.setPreferredSize(new Dimension(Width/2, Height));
+        stockPanel2.setPreferredSize(new Dimension(Width/3, Height));
         stockPanel2.setBackground(new Color (120,70,80));
         stockPanel2.setBorder(border);
         stockPanel2.setLayout(new GridLayout(11, 0));
 
-        JLabel userNW = new JLabel("", SwingConstants.CENTER);
+        JLabel userNW = new JLabel("Net Worth: $", SwingConstants.CENTER);
         userNW.setForeground(Color.WHITE);
-        userNW.setText(Double.toString(ronald.getNetWorth()));
+        userNW.setText("Net Worth: $" + Double.toString(ronald.getNetWorth()));
         stockPanel2.add(userNW);
 
         JPanel stockDisplay = new JPanel();
@@ -117,7 +140,7 @@ public class Frame extends JFrame {
         stockDisplay.add(countDisplay);
 
         JPanel buttonDisplay = new JPanel();
-        buttonDisplay.setPreferredSize(new Dimension(Width/5 + 10, Height/2));
+        buttonDisplay.setPreferredSize(new Dimension(Width/5 + 10, Height/5));
         buttonDisplay.setBackground(new Color (70,70,120));
         buttonDisplay.setBorder(border);
         buttonDisplay.setLayout(new BorderLayout());
@@ -138,44 +161,64 @@ public class Frame extends JFrame {
                         }
                     }
                 }
-                if (amount >= 1 && ronald.getCapital() >= Double.parseDouble(currentStock.getPrice())) {
+                if (amount >= 1 && ronald.getMoney() >= Double.parseDouble(currentStock.getPrice())) {
                     ronald.buyStock(amount);
-                    userNW.setText("Net Worth: $" + Double.toString(ronald.getNetWorth()) + " Buying Power: " + Double.toString(ronald.getCapital()));
+                    userNW.setText("Net Worth: $" + Double.toString(ronald.getNetWorth()));
+                    CapVal.setText("$" + Double.toString(ronald.getMoney()));
+                    CapVal.revalidate();
+                    CapVal.repaint();
+                    CapPanel.revalidate();
+                    CapPanel.repaint();
                     stockPanel2.revalidate();
                     stockPanel2.repaint();
                 if (panelsOfStocks.size() == 0) {
                     StockInfo someStock = new StockInfo(currentStock);
                     panelsOfStocks.add(someStock);
                     stockPanel2.add(someStock);
+                    CapVal.setText("$" + Double.toString(ronald.getMoney()));
+                    CapVal.revalidate();
+                    CapVal.repaint();
+                    CapPanel.revalidate();
+                    CapPanel.repaint();
                     stockPanel2.revalidate();
                     stockPanel2.repaint();
                 }
                 else {
-                    for(int i = 0; i < panelsOfStocks.size(); i++){
+                    int i = 0;
+                    for(i = 0; i < panelsOfStocks.size(); i++){
                         if(currentStock == panelsOfStocks.get(i).getMyStock()){
                             panelsOfStocks.get(i).setQuantity(currentStock.getQauntity());
                             panelsOfStocks.get(i).getTickQuant().setText( "   " + currentStock.getTicker() + "       Amount Owned: " + currentStock.getQauntity());
                             panelsOfStocks.get(i).revalidate();
                             panelsOfStocks.get(i).repaint();
-                            stockPanel2.revalidate();
-                            stockPanel2.repaint();
-                            break;
-                        }
-                        if(i == panelsOfStocks.size() - 1){
-                            StockInfo randoStock = new StockInfo(currentStock);
-                            panelsOfStocks.add(randoStock);
-                            stockPanel2.add(randoStock);
+                            CapVal.setText("$" + Double.toString(ronald.getMoney()));
+                            CapVal.revalidate();
+                            CapVal.repaint();
+                            CapPanel.revalidate();
+                            CapPanel.repaint();
                             stockPanel2.revalidate();
                             stockPanel2.repaint();
                             break;
                         }
                     }
+                    if(i == panelsOfStocks.size()){
+                        StockInfo randoStock = new StockInfo(currentStock);
+                        panelsOfStocks.add(randoStock);
+                        stockPanel2.add(randoStock);
+                        CapVal.setText("$" + Double.toString(ronald.getMoney()));
+                        CapVal.revalidate();
+                        CapVal.repaint();
+                        CapPanel.revalidate();
+                        CapPanel.repaint();
+                        stockPanel2.revalidate();
+                        stockPanel2.repaint();
+                    }
                 }
                 }
             }
         });
-        buyButton.setPreferredSize(new Dimension(Width/5 + 10, Height/4));
-        buttonDisplay.add(buyButton, BorderLayout.NORTH);
+        buttonDisplay.add(buyButton, BorderLayout.WEST);
+        buyButton.setPreferredSize(new Dimension((Width/2)/4 - (Width/50), Height/20));
         buyButton.setText("BUY");
 
         // Sell Button
@@ -186,21 +229,33 @@ public class Frame extends JFrame {
                 ronald.someMethod();
                 if (amount >= 1) {
                     ronald.sellStock(amount);
-                    userNW.setText("Net Worth: $" + Double.toString(ronald.getNetWorth()) + " Buying Power: " + Double.toString(ronald.getCapital()));
+                    userNW.setText("Net Worth: $" + Double.toString(ronald.getNetWorth()));
+                    if (panelsOfStocks.size() > 0) {
+                        for(int i = 0; i < panelsOfStocks.size(); i++) {
+                            if(Integer.parseInt(panelsOfStocks.get(i).getQuantity()) - amount == 0 && panelsOfStocks.get(i).getMyStock() == currentStock) {
+                                stockPanel2.remove(panelsOfStocks.get(i));
+                                panelsOfStocks.remove(i);
+                                CapVal.setText("$" + Double.toString(ronald.getMoney()));
+                                CapVal.revalidate();
+                                CapVal.repaint();
+                                CapPanel.revalidate();
+                                CapPanel.repaint();
+                                stockPanel2.revalidate();
+                                stockPanel2.repaint();
+                            }
+                        }
+                    }
                     for(int i = 0; i < panelsOfStocks.size(); i++){
                         if(currentStock == panelsOfStocks.get(i).getMyStock()){
                             panelsOfStocks.get(i).setQuantity(currentStock.getQauntity());
                             panelsOfStocks.get(i).getTickQuant().setText( "   " + currentStock.getTicker() + "       Amount Owned: " + currentStock.getQauntity());
                             panelsOfStocks.get(i).revalidate();                            
                             panelsOfStocks.get(i).repaint();
-                            stockPanel2.revalidate();
-                            stockPanel2.repaint();
-                            break;
-                        }
-                        if(i == panelsOfStocks.size() - 1){
-                            StockInfo randoStock = new StockInfo(currentStock);
-                            panelsOfStocks.add(randoStock);
-                            stockPanel2.add(randoStock);
+                            CapVal.setText("$" + Double.toString(ronald.getMoney()));
+                            CapVal.revalidate();
+                            CapVal.repaint();
+                            CapPanel.revalidate();
+                            CapPanel.repaint();
                             stockPanel2.revalidate();
                             stockPanel2.repaint();
                             break;
@@ -209,12 +264,12 @@ public class Frame extends JFrame {
                 }
             }
         });
-        sellButton.setPreferredSize(new Dimension(Width/5 + 10, Height/4));
-        buttonDisplay.add(sellButton, BorderLayout.SOUTH);
+        sellButton.setPreferredSize(new Dimension((Width/2)/4 - (Width/50), Height/20));
+        buttonDisplay.add(sellButton, BorderLayout.EAST);
         sellButton.setText("SELL");
 
         JPanel textDisplay = new JPanel();
-        textDisplay.setPreferredSize(new Dimension(Width/2 - 5, Height/10));
+        textDisplay.setPreferredSize(new Dimension(Width/3 - 5, Height/10));
         stockPanel2.setBorder(border);
         textDisplay.setLayout(new FlowLayout());
         textDisplay.setBackground(new Color (70,70,80));
@@ -244,18 +299,78 @@ public class Frame extends JFrame {
         
 
         testPan.add(textDisplay, BorderLayout.NORTH);
-        testPan.add(stockDisplay, BorderLayout.WEST);
-        testPan.add(buttonDisplay, BorderLayout.EAST);
+        testPan.add(stockDisplay, BorderLayout.CENTER);
+        testPan.add(buttonDisplay, BorderLayout.SOUTH);
+
+        //
+
+        CapPanel.add(CapVal, BorderLayout.CENTER);
+        CapPanel.add(CapTitle, BorderLayout.NORTH);
+
+        JButton RerollButton = new JButton();
+        rollcount = 10;
+        RerollButton.setText(("Roll (Remaining: " + rollcount + ")"));
+        RerollButton.setPreferredSize(new Dimension(Width/6 - 1, ButtonPanel.getHeight()));
+        JButton AcceptButton = new JButton();
+        AcceptButton.setText("Accept");
+        AcceptButton.setPreferredSize(new Dimension(Width/6 - 1, ButtonPanel.getHeight()));
+
+        ButtonPanel.add(RerollButton, BorderLayout.WEST);
+        ButtonPanel.add(AcceptButton, BorderLayout.EAST);
+        CapPanel.add(ButtonPanel, BorderLayout.SOUTH);
+        rolls = new Stack<>();
+        StartingMoney startmoney = new StartingMoney(); 
+        RerollButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                if (rollcount <= 1){
+                    ronald.setCapital(capital);
+                    userNW.setText("Net Worth: $" + Double.toString(ronald.getNetWorth()));
+                    userNW.revalidate();
+                    userNW.repaint();
+                    stockPanel2.revalidate();
+                    stockPanel2.repaint();
+                    CapPanel.remove(ButtonPanel);
+                    CapPanel.revalidate();
+                }
+                else {
+                    GenerateCapital generator = new GenerateCapital();
+                    capital = generator.rollroulette();
+                    stockPanel2.revalidate();
+                    stockPanel2.repaint();
+                    rolls.push(capital);
+                    CapVal.setText(String.valueOf("$" + capital));
+                    rollcount--;
+                    RerollButton.setText(("Roll (Remaining: " + rollcount + ")"));
+                }
+                
+            }
+        });
+        AcceptButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+                ronald.setCapital(capital);
+                userNW.setText("Net Worth: $" + Double.toString(ronald.getNetWorth()));
+                userNW.revalidate();
+                userNW.repaint();
+                stockPanel2.revalidate();
+                stockPanel2.repaint();
+                startmoney.giveMeMoney(rolls.pop());
+                ronald.setCapital(startmoney.getMoney());
+                CapPanel.remove(ButtonPanel);
+                CapPanel.revalidate();
+                CapPanel.repaint();
+            }
+        });
         
 
         this.add(testPan, BorderLayout.WEST);
-        this.add(stockPanel2, BorderLayout.EAST);
+        this.add(stockPanel2, BorderLayout.CENTER);
+        this.add(CapPanel, BorderLayout.EAST);
         this.setVisible(true);
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-            //WebScrapper.updateAllStocks();
-            //Add multithreading to updating all stocks (will make runtime 2812x faster)
+            //WebScrapper.updateAllStocks(); Multithreading to make run faster, however needs some optmization (Won't be in final version just yet)
             WebScrapper.writeJSON();
             //Save user data as well
             return;
