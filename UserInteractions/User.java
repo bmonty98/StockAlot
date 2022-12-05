@@ -65,7 +65,7 @@ import Draw.Frame;
 
             if(this.capital - targetedStockPrice >= 0){
                 this.portfolio.put(targetedStock.getTicker(), targetedStock);
-                this.capital -= targetedStockPrice;
+                this.capital -= targetedStockPrice * amount;
                 Frame.getStock().setQuantity(targetedStock.getQauntity() + amount);
                 System.out.println("you have just bought a stock");
                 System.out.println(Frame.getStock().getQauntity());
@@ -110,13 +110,17 @@ import Draw.Frame;
 
             double targetedStockForSalePrice = Double.parseDouble(targetedStockForSale.getPrice());
 
-            this.portfolio.remove(targetedStockForSale.getTicker(), targetedStockForSale);
-                this.capital += targetedStockForSalePrice;
+            if(Frame.getStock().getQauntity() > 0){
+                this.capital += targetedStockForSalePrice * amount;
                 Frame.getStock().setQuantity(targetedStockForSale.getQauntity() - amount);
                 System.out.println("you have just sold a stock");
                 System.out.println(Frame.getStock().getQauntity());
                 System.out.println();
+            }
 
+            else{
+                this.portfolio.remove(targetedStockForSale.getTicker(), targetedStockForSale);
+            }
         }
 
         catch(IllegalArgumentException portfolioFailure){
