@@ -14,6 +14,7 @@ public class stockObject implements Runnable, Comparable<stockObject> {
     private String price;
     private String ticker;
     private Element row;
+    private int quantity;
 
     public void run() {
         if (row.select("td:nth-of-type(1)").text() == null) {
@@ -73,7 +74,7 @@ public class stockObject implements Runnable, Comparable<stockObject> {
                     .text(); // Can get more data, such as gain since open and % if final :eq() is removed
             this.setPrice(priceStr);
         } catch (IOException e) {
-            System.out.println("404 or 503 Error, Skipping Stock: " + this.name);
+            System.out.println("404 or 503 Error or Yahoo Doesn't Have This Stock, Skipping Stock: " + this.name);
             return;
         }
     }
@@ -102,9 +103,11 @@ public class stockObject implements Runnable, Comparable<stockObject> {
     public stockObject(Element someRow, String url) {
         this.row = someRow;
         this.url = url;
+        this.quantity = 0;
     }
 
     public stockObject() {
+        this.quantity = 0;
     };
 
     public String getName() {
@@ -125,6 +128,15 @@ public class stockObject implements Runnable, Comparable<stockObject> {
 
     public String getYURL() {
         return this.stockYURL;
+    }
+
+    public int getQauntity() {
+        return this.quantity;
+    }
+
+    public void setQuantity(int q) {
+        this.quantity = q;
+        return;
     }
 
     public void setName(String sName) {
