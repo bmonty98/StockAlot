@@ -1,6 +1,6 @@
 # CS-49J-Final-Project
 
-Github:
+Github: https://github.com/bmonty98/CS-49J-Final-Project
 
 Classes and Methods:
 - Frame.java
