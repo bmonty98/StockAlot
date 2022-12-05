@@ -3,7 +3,7 @@
 Github: https://github.com/bmonty98/CS-49J-Final-Project
 
 Classes and Methods:
-Frame.java:
+## Frame.java:
   - Frame(int h, int w): Constructor, used to make the entire GUI run
   - getStock: Gets the stock currently active on the GUI
   - setStock: Sets the current stock on the GUI
