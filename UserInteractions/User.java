@@ -18,8 +18,8 @@ import Draw.Frame;
     private double netWorth;
     
     public User(){
-        this.capital = 500.50;
-        this.name = "John Doe";
+        this.capital = 0;
+        this.name = "Player 1";
         this.portfolio = new HashMap<String, stockObject>();
         this.netWorth = this.capital;
     }
@@ -85,6 +85,7 @@ import Draw.Frame;
 
         catch(IllegalArgumentException Frame_getStock_failure){
             System.out.println("returned a null object, ticker could not be found in Frame.getStock()");
+            return;
         }
 
         return;
@@ -110,7 +111,7 @@ import Draw.Frame;
 
             double targetedStockForSalePrice = Double.parseDouble(targetedStockForSale.getPrice());
 
-            if(Frame.getStock().getQauntity() > 0){
+            if(Frame.getStock().getQauntity() - amount >= 0){
                 this.capital += targetedStockForSalePrice * amount;
                 Frame.getStock().setQuantity(targetedStockForSale.getQauntity() - amount);
                 System.out.println("you have just sold a stock");
@@ -118,14 +119,26 @@ import Draw.Frame;
                 System.out.println();
             }
 
-            else{
+            if(Frame.getStock().getQauntity() == 0){
                 this.portfolio.remove(targetedStockForSale.getTicker(), targetedStockForSale);
+            }
+
+            else{
+                throw new ArithmeticException("cant have a negative amount of a Stock!!!!");
             }
         }
 
         catch(IllegalArgumentException portfolioFailure){
             System.out.println("returned False for containsKey(), ticker could not be found in the portfolio");
+            return;
         }
+
+        catch(ArithmeticException negativeQuantity){
+            System.out.println("Cannot have a negative quantity of a stock!!!!! if you cant count, go back to kindergarden.");
+            return;
+        }
+
+        return;
     }
 
     /**
