@@ -107,10 +107,17 @@ public class WebScrapper {
         }
         return;
     }
-
     public static void updateAllStocks() {
         for (Entry<String, stockObject> entry : WebScrapper.someHash.entrySet()) {
-            entry.getValue().updatePrice();
+            PriceUpdate updateStockP = new PriceUpdate(entry.getValue());
+            Thread tThread = new Thread(updateStockP);
+            try {
+                Thread.sleep(60);
+                tThread.start();
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return;
     }
