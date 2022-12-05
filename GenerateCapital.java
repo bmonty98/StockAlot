@@ -5,22 +5,26 @@ import java.util.Stack;
 import java.util.Scanner;
 import javax.swing.*;
 
-public class GenerateCapital { // Prompts the user to "roll" up to 10 times for their starting capital value
+public class GenerateCapital implements boolingShingle { // Prompts the user to "roll" up to 10 times for their starting capital value
+
+  public void someMethod(){
+    Random seedgen = new Random(); // Random Number Generation
+    rolls.push(seedgen.nextInt(20000000)); // Generate a random integer (Max 20,000,000) and push to stack
+  }
 
   // Store each "roll" on a stack so that the user can only choose the most recent
   // roll
   public static Stack<Integer> rolls = new Stack<>();
 
-  public static double rollroulette(int count) { // Function called to roll for value
-
-    JFrame frame = new JFrame("Capital Lottery!");
+  public double rollroulette(int count) { // Function called to roll for value
 
     // Class objects for utility
+    
     Scanner choice = new Scanner(System.in); // User Input
-    Random seedgen = new Random(); // Random Number Generation
+    
 
     // Generate and store rolled value
-    rolls.push(seedgen.nextInt(20000000)); // Generate a random integer (Max 20,000,000) and push to stack
+    someMethod();
     double currentroll = (Double.valueOf(rolls.peek()) / 100); // Convert Rolled integer into a double with two decimal
                                                                // place
                                                                // We want to cap our capital at $200,000.00
@@ -61,12 +65,12 @@ public class GenerateCapital { // Prompts the user to "roll" up to 10 times for 
     return acceptedroll; // Return final value
   }
 
-  public static void main(String[] args) {
+  /*public static void main(String[] args) {
 
     double Capital = rollroulette(1);
 
     System.out.print(Capital);
 
   }
-
+*/
 }
