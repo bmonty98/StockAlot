@@ -20,5 +20,12 @@ Classes and Methods:
 - User.java
 - WebScrapper.java
 
+User.java:
+- someMethod: Impliments an interface to read off a UserSummary.
+- buyStock(int Quantity): manages the interaction of a User to buy a valid stock from the market and have it stashed in a porfolio thats represented by a hashmap. throws errors if the function cant find the stock or the user has insufficent funds.
+- sellStock(int Quantity): manages the interaction of a player selling a stock from their portfolio back to the market for its current worth. Throws errors if the stock deired to sell is not found in the portfolio or if you try to sell more of the stock than you can that would give you a negative amount of stock in there.
+- Bankruptcy(): boolean method, the returns true if player has no capital and no stocks in portfolio otherwise returns false.
+- 
+
 How to Run:
 
