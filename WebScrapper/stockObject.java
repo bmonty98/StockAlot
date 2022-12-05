@@ -73,7 +73,7 @@ public class stockObject implements Runnable, Comparable<stockObject> {
                     .text(); // Can get more data, such as gain since open and % if final :eq() is removed
             this.setPrice(priceStr);
         } catch (IOException e) {
-            System.out.println("404 or 503 Error, Skipping Stock: " + this.name);
+            System.out.println("404 or 503 Error or Yahoo Doesn't Have This Stock, Skipping Stock: " + this.name);
             return;
         }
     }
