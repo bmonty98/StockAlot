@@ -1,4 +1,8 @@
 package Draw;
+import java.util.ArrayList;
+import java.util.function.DoubleToLongFunction;
+import java.util.spi.CurrencyNameProvider;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -17,9 +21,10 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import javax.swing.border.Border;
+import javax.management.relation.RoleNotFoundException;
 import javax.swing.BorderFactory;
 import WebScrapper.stockObject;
-import WebScrapper.boolingShingle;
+import UserInteractions.User;
 
 public class Frame extends JFrame {
     private int Height;
@@ -27,7 +32,12 @@ public class Frame extends JFrame {
     private String text;
     private static stockObject currentStock;
     private static int amount = 0;
+    private boolean doRepaint;
+    public Frame() {};
     public Frame(int h, int w) {
+        doRepaint = false;
+        User ronald = new User();
+        ArrayList<StockInfo> panelsOfStocks = new ArrayList<>();
         Height = h;
         Width = w;
         this.setTitle("US Stock Market");
@@ -46,7 +56,12 @@ public class Frame extends JFrame {
         stockPanel2.setPreferredSize(new Dimension(Width/2, Height));
         stockPanel2.setBackground(new Color (120,70,80));
         stockPanel2.setBorder(border);
-        stockPanel2.setLayout(new BorderLayout());
+        stockPanel2.setLayout(new GridLayout(11, 0));
+
+        JLabel userNW = new JLabel("", SwingConstants.CENTER);
+        userNW.setForeground(Color.WHITE);
+        userNW.setText(Double.toString(ronald.getNetWorth()));
+        stockPanel2.add(userNW);
 
         JPanel stockDisplay = new JPanel();
         stockDisplay.setPreferredSize(new Dimension(Width/5 + 10, Height/2));
@@ -112,7 +127,51 @@ public class Frame extends JFrame {
         buyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-                System.out.println("Purchase Stock");
+                ronald.someMethod();
+                if (panelsOfStocks.size() > 0) {
+                    for(int i = 0; i < panelsOfStocks.size(); i++) {
+                        if(Integer.parseInt(panelsOfStocks.get(i).getQuantity()) <= 0) {
+                            stockPanel2.remove(panelsOfStocks.get(i));
+                            panelsOfStocks.remove(i);
+                            stockPanel2.revalidate();
+                            stockPanel2.repaint();
+                        }
+                    }
+                }
+                if (amount >= 1 && ronald.getCapital() >= Double.parseDouble(currentStock.getPrice())) {
+                    ronald.buyStock(amount);
+                    userNW.setText("Net Worth: $" + Double.toString(ronald.getNetWorth()) + " Buying Power: " + Double.toString(ronald.getCapital()));
+                    stockPanel2.revalidate();
+                    stockPanel2.repaint();
+                if (panelsOfStocks.size() == 0) {
+                    StockInfo someStock = new StockInfo(currentStock);
+                    panelsOfStocks.add(someStock);
+                    stockPanel2.add(someStock);
+                    stockPanel2.revalidate();
+                    stockPanel2.repaint();
+                }
+                else {
+                    for(int i = 0; i < panelsOfStocks.size(); i++){
+                        if(currentStock == panelsOfStocks.get(i).getMyStock()){
+                            panelsOfStocks.get(i).setQuantity(currentStock.getQauntity());
+                            panelsOfStocks.get(i).getTickQuant().setText( "   " + currentStock.getTicker() + "       Amount Owned: " + currentStock.getQauntity());
+                            panelsOfStocks.get(i).revalidate();
+                            panelsOfStocks.get(i).repaint();
+                            stockPanel2.revalidate();
+                            stockPanel2.repaint();
+                            break;
+                        }
+                        if(i == panelsOfStocks.size() - 1){
+                            StockInfo randoStock = new StockInfo(currentStock);
+                            panelsOfStocks.add(randoStock);
+                            stockPanel2.add(randoStock);
+                            stockPanel2.revalidate();
+                            stockPanel2.repaint();
+                            break;
+                        }
+                    }
+                }
+                }
             }
         });
         buyButton.setPreferredSize(new Dimension(Width/5 + 10, Height/4));
@@ -124,7 +183,30 @@ public class Frame extends JFrame {
         sellButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-                System.out.println("Sell Stock");
+                ronald.someMethod();
+                if (amount >= 1) {
+                    ronald.sellStock(amount);
+                    userNW.setText("Net Worth: $" + Double.toString(ronald.getNetWorth()) + " Buying Power: " + Double.toString(ronald.getCapital()));
+                    for(int i = 0; i < panelsOfStocks.size(); i++){
+                        if(currentStock == panelsOfStocks.get(i).getMyStock()){
+                            panelsOfStocks.get(i).setQuantity(currentStock.getQauntity());
+                            panelsOfStocks.get(i).getTickQuant().setText( "   " + currentStock.getTicker() + "       Amount Owned: " + currentStock.getQauntity());
+                            panelsOfStocks.get(i).revalidate();                            
+                            panelsOfStocks.get(i).repaint();
+                            stockPanel2.revalidate();
+                            stockPanel2.repaint();
+                            break;
+                        }
+                        if(i == panelsOfStocks.size() - 1){
+                            StockInfo randoStock = new StockInfo(currentStock);
+                            panelsOfStocks.add(randoStock);
+                            stockPanel2.add(randoStock);
+                            stockPanel2.revalidate();
+                            stockPanel2.repaint();
+                            break;
+                        }
+                    }
+                }
             }
         });
         sellButton.setPreferredSize(new Dimension(Width/5 + 10, Height/4));
@@ -172,13 +254,14 @@ public class Frame extends JFrame {
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-            WebScrapper.updateAllStocks();
+            //WebScrapper.updateAllStocks();
             //Add multithreading to updating all stocks (will make runtime 2812x faster)
             WebScrapper.writeJSON();
             //Save user data as well
             return;
             }
         });
+        // add Constant Updates to stock portfolio in while loop.
         while(this.isActive()) {
             if(currentStock != null)  {currentStock.someMethod();} // Probably want to make a seperate thread to do this
         }
