@@ -4,7 +4,6 @@ Github:
 
 Classes and Methods:
 - Frame.java
-    - 
 - GenerateCapital.java
     - SomeMethod: Implements and interface to generate random value
     - rollroulette: Calls the somemethod and converts the randomly generated interger to an floating point number
