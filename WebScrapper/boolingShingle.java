@@ -1,5 +1,5 @@
 package WebScrapper;
 
-interface boolingShingle {
-    public stockObject getStock();
+public interface boolingShingle {
+    public void someMethod(); 
 }
