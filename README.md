@@ -13,6 +13,9 @@ Github: https://github.com/bmonty98/CS-49J-Final-Project
   - getMyStock: returns stock data
   - StockInfo(stockObject o): Constructor to create a new StockInfo panel
   - Few getters and setters included
+## StockUpdating.java
+  - StockUpdating() Constructor to make object
+  - run() for multithreading purposes, dynamically updates GUI to show real time data
 ## GenerateCapital.java
   - SomeMethod: Implements and interface to generate random value
   - rollroulette: Calls the somemethod and converts the randomly generated interger to an floating point number
