@@ -17,6 +17,7 @@ public class StockInfo extends JPanel{
     private String ticker;
     private String quantity;
     private JLabel tickQuant;
+    private JLabel sPrice;
     public stockObject getMyStock(){
         return this.myStock;
     }
@@ -38,9 +39,10 @@ public class StockInfo extends JPanel{
         this.add(stockName);
 
         JLabel stockPrice = new JLabel("", SwingConstants.LEFT);
-        stockPrice.setForeground(Color.WHITE);
-        stockPrice.setText("   $" + price);
-        this.add(stockPrice);
+        sPrice = stockPrice;
+        sPrice.setForeground(Color.WHITE);
+        sPrice.setText("   $" + price);
+        this.add(sPrice);
 
         JLabel stockTicker = new JLabel("", SwingConstants.LEFT);
         tickQuant = stockTicker;
@@ -62,5 +64,8 @@ public class StockInfo extends JPanel{
     }
     public JLabel getTickQuant() {
         return this.tickQuant;
+    }
+    public JLabel getSPrice() {
+        return this.sPrice;
     }
 }

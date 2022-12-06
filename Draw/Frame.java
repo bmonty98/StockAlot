@@ -7,6 +7,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import java.awt.Color;
 import java.awt.Dimension;
+
 import WebScrapper.WebScrapper;
 import WebScrapper.getHashed;
 import java.awt.event.WindowEvent;
@@ -36,8 +37,12 @@ public class Frame extends JFrame {
     private int rollcount;
     private Double capital;
     public static Stack<Double> rolls;
+    private User ronald;
+    private boolean contGoing;
     public Frame(int h, int w) {
-        User ronald = new User();
+        this.contGoing = true;
+        User donald = new User();
+        ronald = donald;
         ArrayList<StockInfo> panelsOfStocks = new ArrayList<>();
         Height = h;
         Width = w;
@@ -45,7 +50,7 @@ public class Frame extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(Width, Height);
         this.setLayout(new BorderLayout());
-        this.setResizable(false);
+        this.setResizable(true);
         Border border = BorderFactory.createLineBorder(Color.WHITE);
 
         JPanel CapPanel = new JPanel();
@@ -367,22 +372,32 @@ public class Frame extends JFrame {
         this.add(stockPanel2, BorderLayout.CENTER);
         this.add(CapPanel, BorderLayout.EAST);
         this.setVisible(true);
+        Frame tempFrame = this;
         this.addWindowListener(new WindowAdapter() {
+            Thread myThread;
+            @Override
+            public void windowOpened(WindowEvent e) {
+                contGoing = true;
+                StockUpdating uStocks = new StockUpdating(panelsOfStocks, tempFrame, CapPanel, userNW, stockPrice);
+                myThread = new Thread(uStocks);
+                myThread.start();
+            }
             @Override
             public void windowClosing(WindowEvent e) {
-            //WebScrapper.updateAllStocks(); Multithreading to make run faster, however needs some optmization (Won't be in final version just yet)
-            WebScrapper.writeJSON();
-            //Save user data as well
-            return;
+                contGoing = false;
+                //WebScrapper.updateAllStocks(); //Multithreading to make run faster, however needs some optmization (Won't be in final version just yet)
+                WebScrapper.writeJSON();
+                //Save user data as well
+                return;
             }
         });
         // add Constant Updates to stock portfolio in while loop.
-        while(this.isActive()) {
-            if(currentStock != null)  {currentStock.someMethod();} // Probably want to make a seperate thread to do this
-        }
     }
     public static stockObject getStock() {
         return currentStock;
+    }
+    public boolean getGoing() {
+        return this.contGoing;
     }
     public static void setStock(stockObject o) {
         currentStock = o;
@@ -394,5 +409,8 @@ public class Frame extends JFrame {
     public static void setAmount(int a) {
         amount = a;
         return;
+    }
+    public User getUser() {
+        return this.ronald;
     }
 }
