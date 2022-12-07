@@ -86,4 +86,17 @@ Frame myFrame = new Frame(500, 1000);
 
 ## For Real Time Data:
 
-All data is technically real time, however, as the stock market closes in order to get data that changes make sure to run the program Mon-Fri 6:30-1:00 PM
+# All data is technically real time, however, as the stock market closes in order to get data that changes make sure to run the program Mon-Fri 6:30-1:00 PM
+
+## Using the GUI
+In order to use the program you must first get money
+
+This is done on the right hand side of the program, Roll/Reroll to get money and accept what random amount of money you get if you want (10 Rolls maximum)
+
+Then on the left hand side of the program is a search bar, search stock tickers (Ex: AMZN, AAPL, AMD)
+
+Only correct stock tickers work right now no incorrect tickers / names work
+
+Press enter to get that stock and then buy and sell that amount of stock with your money you generated
+
+That's it, enjoy!
