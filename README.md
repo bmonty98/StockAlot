@@ -71,7 +71,7 @@ Run this code in order to use the program
 
 
 
-If you would rather create your own main() function, import these:
+### If you would rather create your own main() function, import these:
 
 
 import Draw.Frame;
