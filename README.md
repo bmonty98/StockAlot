@@ -58,7 +58,9 @@ Github: https://github.com/bmonty98/CS-49J-Final-Project
 
 # How to Run:
 
-In the lib folder are the included dependent libraries.
+1. JDK Version 17.0.4 at a minimum.
+
+2. In the lib folder are the included dependent libraries, if code does not work right away make sure these are listed as referenced libraries in order to run the code. Pertinent for Web Scraping.
 
 json-simple-1.1.1.jar
 
@@ -66,13 +68,19 @@ and
 
 jsoup-1.15.3.jar
 
-Make sure these are listed as referenced libraries in order to run the code. Pertinent for Web Scraping
+Otherwise ensure the following packages are installed:
 
-*** stocks.json Must be in the same directory as the src folder not inside src ***
+ - java.util.*
 
-Code to run program is found in App.java
-Run this code in order to use the program
+ - java.io.*
 
+ - javax.swing.*
+
+ - java.awt.*
+
+3. Main() found in App.java in order to use program
+
+4. Run
 
 
 ### If you would rather create your own main() function, import these:
