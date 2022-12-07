@@ -86,7 +86,7 @@ Frame myFrame = new Frame(500, 1000);
 
 ## For Real Time Data:
 
-# All data is technically real time, however, as the stock market closes in order to get data that changes make sure to run the program Mon-Fri 6:30-1:00 PM
+### All data is technically real time, however, as the stock market closes in order to get data that changes make sure to run the program Mon-Fri 6:30-1:00 PM
 
 ## Using the GUI
 In order to use the program you must first get money
