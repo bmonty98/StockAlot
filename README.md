@@ -54,10 +54,23 @@ Github: https://github.com/bmonty98/CS-49J-Final-Project
 
 # How to Run:
 
+In the lib folder are the included dependent libraries.
+
+json-simple-1.1.1.jar
+
+and 
+
+jsoup-1.15.3.jar
+
+Make sure these are listed as referenced libraries in order to run the code. Pertinent for Web Scraping
+
+*** stocks.json Must be in the same directory as the src folder not inside src ***
+
 Code to run program is found in App.java
 Run this code in order to use the program
 
 If you would rather create your own main() function, import these:
+
 
 import Draw.Frame;
 
