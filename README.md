@@ -2,8 +2,9 @@
 
 Github: https://github.com/bmonty98/CS-49J-Final-Project
 
-### prerequisites
-## JDK Version 17.0.4 at a minimum.
+### Prerequisites
+ - JDK Version 17.0.4 at a minimum.
+ - IDE of choice.
 
 # Classes and Methods:
 ## Frame.java:
