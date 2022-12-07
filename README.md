@@ -63,5 +63,5 @@ import WebScrapper.WebScrapper;
 
 Then include these lines of code:
 
-WebScrapper.readJSON();
-Frame myFrame = new Frame(500, 1000);
+WebScrapper.readJSON()
+Frame myFrame = new Frame(500, 1000)
