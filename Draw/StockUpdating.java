@@ -63,7 +63,12 @@ public class StockUpdating implements Runnable {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            this.run();
+            this.run(); 
+            // When exception happens, it's because the portoflio is being edited at the same time in multiple threads
+            // Solution is evident, sleep this thread when stock is being bought / sold
+            // Fix seems easy but time is running out
+            // This temporary solution of calling run() in the catch is not optimal but it is "safe" and will work
+            // Technically recursion without a base case
         }
 
     }
