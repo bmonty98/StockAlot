@@ -1,16 +1,9 @@
-import WebScrapper.WebScrapper;
-import WebScrapper.getHashed;
-import WebScrapper.stockObject;
-import java.util.HashMap;
-import java.util.Map.Entry;
+import WebScrapper.*;
+import Draw.Frame;
 
 public class App {
     public static void main(String[] args) throws Exception {
         WebScrapper.readJSON();
-        for (Entry<String, stockObject> entry : WebScrapper.someHash.entrySet()) {
-            entry.getValue().updatePrice();
-        }
-
-        return;
+        Frame someFrame = new Frame(500, 1000);
     }
 }
