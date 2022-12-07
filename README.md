@@ -2,6 +2,9 @@
 
 Github: https://github.com/bmonty98/CS-49J-Final-Project
 
+### prerequisites
+## JDK Version 17.0.4 at a minimum.
+
 # Classes and Methods:
 ## Frame.java:
   - Frame(int h, int w): Constructor, used to make the entire GUI run
