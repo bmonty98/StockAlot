@@ -62,13 +62,11 @@ Github: https://github.com/bmonty98/CS-49J-Final-Project
 
 2. In the lib folder are the included dependent libraries, if code does not work right away make sure these are listed as referenced libraries in order to run the code. Pertinent for Web Scraping.
 
-json-simple-1.1.1.jar
+ - json-simple-1.1.1.jar
 
-and 
+ - jsoup-1.15.3.jar
 
-jsoup-1.15.3.jar
-
-Otherwise ensure the following packages are installed:
+ Otherwise ensure the following packages are installed:
 
  - java.util.*
 
