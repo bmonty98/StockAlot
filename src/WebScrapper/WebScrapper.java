@@ -84,7 +84,7 @@ public class WebScrapper {
         JSONParser parser = new JSONParser();
         someHash.clear();
         try {
-            Object obj = parser.parse(new FileReader("stocks.json"));
+            Object obj = parser.parse(new FileReader("./WebScrapper/src/stocks.json"));
             JSONArray someJarr = (JSONArray) obj;
             JSONObject jOBJ = new JSONObject();
             Iterator<JSONObject> iterator = someJarr.iterator();
